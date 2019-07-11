@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-################################################################################
-# FileName: main.py
-# Author:   Wenyu
-# Date:     07/03/2019
-# Version:  v1.0 [07/03/2019][Wenyu] obtain face and landmarks with YOLO and SBR 
-#                                    by Tianlei
-#           v2.0 [07/04/2019][Wenyu] combine code and obtain gaze point by 
-#                                    Shifan
-#           v2.1 [07/04/2019][Wenyu] format the code
-#           v2.2 [07/11/2019][Wenyu] formal the code on github
-#
-################################################################################
+'''
+FileName: main.py
+Author:   Wenyu
+Date:     07/03/2019
+Version:  v1.0 [07/03/2019][Wenyu] obtain face and landmarks with YOLO and SBR 
+                                   by Tianlei
+          v2.0 [07/04/2019][Wenyu] combine code and obtain gaze point by Shifan
+          v2.1 [07/04/2019][Wenyu] format the code
+          v2.2 [07/11/2019][Wenyu] formal the code on github
+'''
 
 import yolo_video
 from util import get_multi_roi
@@ -38,7 +36,7 @@ def main(input_type):
 		frame = cv2.imread(image_path)
 
 	yolo = yolo_video.yolo_video()
-	track = test_mp2.test_small()
+	#track = test_mp2.test_small()
 
 	while True:
 		# get image
@@ -58,10 +56,10 @@ def main(input_type):
 		landmarks = dic['landmarks']
 
 		# segment roi
-		face, face_mask, left_eye, right_eye = get_multi_roi.get_multi_roi(image, landmarks)
+		#face, face_mask, left_eye, right_eye = get_multi_roi.get_multi_roi(image, landmarks)
 
 		# predict gaze point
-		track.predict(face, face_mask, left_eye, right_eye)
+		#track.predict(face, face_mask, left_eye, right_eye)
 
 
 if __name__ == '__main__':
