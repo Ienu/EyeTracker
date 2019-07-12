@@ -103,8 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# pth
+# model
 *.pth
+gaze_est/model
 
 # data
 *.mp4
