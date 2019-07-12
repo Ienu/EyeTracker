@@ -105,3 +105,6 @@ venv.bak/
 
 # pth
 *.pth
+
+# data
+*.mp4

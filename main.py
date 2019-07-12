@@ -8,19 +8,18 @@ Version:  v1.0 [07/03/2019][Wenyu] obtain face and landmarks with YOLO and SBR
           v2.0 [07/04/2019][Wenyu] combine code and obtain gaze point by Shifan
           v2.1 [07/04/2019][Wenyu] format the code
           v2.2 [07/11/2019][Wenyu] formal the code on github
-		  v2.3 [07/12/2019][Wenyu] add and test face detector
+		  v2.3 [07/12/2019][Wenyu] add and test face detector and landmark detector
 '''
 
-#import yolo_video
 #from util import get_multi_roi
-#from gaze import test_small
-#from gaze import test_mp2
 
 from face_detect import detect_face
 from landmark_detect import detect_landmarks
 
 import cv2
 import numpy as np
+
+from PIL import Image
 
 video_path = 'data/test_video.mp4'
 image_path = 'data/test_image.jpg'
@@ -36,11 +35,7 @@ def main(input_type):
 		video_reader = cv2.VideoCapture(0)
 		video_reader.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 		video_reader.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-	else:
-		frame = cv2.imread(image_path)
 
-	#yolo = yolo_video.yolo_video()
-	#track = test_mp2.test_small()
 	face_detector = detect_face.FaceDetect()
 	landmark_detector = detect_landmarks.LandmarkDetect()
 
@@ -51,20 +46,27 @@ def main(input_type):
 			if ret == False:
 				break
 		else:
-			image = frame
+			image = cv2.imread(image_path)
 
 		# get face box
-		img, face = face_detector.detect_face(image)
+		face = face_detector.detect_face(image)
+
+		if face == None:
+			continue
 
 		# get landmarks
-		landmark_detector.detect_landmarks(img, face, image)
-		
-		#dic = yolo.detect(image)
-		#if dic == None:
-		#	continue
+		img = Image.fromarray(image)
+		landmarks = landmark_detector.detect_landmarks(img, face)
 
-		#face_rect = dic['face']
-		#landmarks = dic['landmarks']
+		# show face rect and landmarks
+		cv2.rectangle(image, (face[1], face[2]), (face[3], face[4]), color=(0, 255, 0))
+		for j in range(landmarks.shape[1]):
+			point = landmarks[:, j]
+			cv2.circle(image, (int(point[0]), int(point[1])), radius=5,color=(0, 0, 255), thickness=-1)
+		#	#cv2.putText(image, str(j), (int(point[0]), int(point[1])), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 255, 0), 1)
+
+		cv2.imshow('dst', image)
+		cv2.waitKey(1)
 
 		# segment roi
 		#face, face_mask, left_eye, right_eye = get_multi_roi.get_multi_roi(image, landmarks)
@@ -74,5 +76,5 @@ def main(input_type):
 
 
 if __name__ == '__main__':
-	main('image')
+	main('video')
 

@@ -38,7 +38,6 @@ class FaceDetect:
     def detect_face(self, image):
         '''get face bounding box from image'''
 
-        #cv2.imshow("src", image)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         img = Image.fromarray(image)
@@ -50,14 +49,5 @@ class FaceDetect:
             return
 
         if len(face) > 0:
-            cv2.rectangle(image, (face[1], face[2]), (face[3], face[4]), color=(0, 255, 0))
-            cv2.imshow('face', image)
-            cv2.waitKey(0)
-            return img, face
-
-#if __name__ == '__main__':
-#    face_detect = FaceDetect()
-
-#    f = cv2.imread('../data/test_image.jpg')
-#    face_detect.detect_face(f)
+            return face
 
