@@ -11,7 +11,7 @@ from keras.layers.normalization import BatchNormalization
 from keras.models import Model
 from keras.regularizers import l2
 
-from tiny_yolo.yolo3.utils import compose
+from .utils import compose
 
 
 @wraps(Conv2D)
@@ -86,7 +86,7 @@ def yolo_body(inputs, num_anchors, num_classes):
 
 def tiny_yolo_body(inputs, num_anchors, num_classes):
     '''Create Tiny YOLO_v3 model CNN body in keras.
-    输入的尺寸为224x224，池化时对尺寸进行缩小，当y1输出时，池化为：224/2/2/2/2=14
+    224x224 224/2/2/2/2=14
     y2=7
     '''
     x1 = compose(
@@ -348,20 +348,6 @@ def box_iou(b1, b2):
 
 def yolo_loss(args, anchors, num_classes, ignore_thresh=.5, print_loss=False):
     '''Return yolo_loss tensor
-    
-    num_layers：层的数量，是anchors数量的3分之1；
-    args:前3个是yolo_outputs预测值，后3个是y_true真值；
-    anchor_mask：anchor box的索引数组，3个1组倒序排序，678对应13x13，345对应26x26，123对应52x52；
-    即[[6, 7, 8], [3, 4, 5], [0, 1, 2]]；
-    input_shape：K.shape(yolo_outputs[0])[1:3]，第1个预测矩阵yolo_outputs[0]的结构（shape）的第1~2位，
-    即(?, 13, 13, 18)中的(13, 13)。再x32，就是YOLO网络的输入尺寸，
-    即(416, 416)，因为在网络中，含有5个步长为(2, 2)的卷积操作，降维32=5^2倍；
-    grid_shapes：与input_shape类似，K.shape(yolo_outputs[l])[1:3]，以列表的形式，选择3个尺寸的预测图维度，
-    即[(13, 13), (26, 26), (52, 52)]；
-    m：第1个预测图的结构的第1位，即K.shape(yolo_outputs[0])[0]，输入模型的图片总量，即批次数；
-    mf：m的float类型，即K.cast(m, K.dtype(yolo_outputs[0]))
-    loss：损失值为0；
-    
     '''
     num_layers = len(anchors)//3 # default setting
     yolo_outputs = args[:num_layers]

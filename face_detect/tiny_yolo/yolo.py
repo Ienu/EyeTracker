@@ -11,15 +11,15 @@ from keras import backend as K
 from keras.models import load_model
 from keras.layers import Input
 from PIL import Image, ImageFont, ImageDraw
-from tiny_yolo.yolo3.tinymodel import yolo_eval, yolo_body, tiny_yolo_body
-from tiny_yolo.yolo3.utils import letterbox_image
+from .yolo3.tinymodel import yolo_eval, yolo_body, tiny_yolo_body
+from .yolo3.utils import letterbox_image
 from keras.utils import multi_gpu_model
 
 class YOLO(object):
     _defaults = {
-        "model_path": 'tiny_yolo/logs/best_weights.h5',
-        "anchors_path": 'tiny_yolo/model_data/tiny_yolo_anchors.txt',
-        "classes_path": 'tiny_yolo/model_data/voc_classes.txt',
+        "model_path": 'face_detect/tiny_yolo/logs/best_weights.h5',
+        "anchors_path": 'face_detect/tiny_yolo/model_data/tiny_yolo_anchors.txt',
+        "classes_path": 'face_detect/tiny_yolo/model_data/voc_classes.txt',
         "score" : 0.3,
         "iou" : 0.25,
         "model_image_size" : (416, 416),
@@ -133,8 +133,7 @@ class YOLO(object):
             score = out_scores[i]
 
             label = '{} {:.2f}'.format(predicted_class, score)
-            image = image.convert('RGB') #对图像进行转换维度
-            draw = ImageDraw.Draw(image)
+            image = image.convert('RGB') #对图像进行转换维�?            draw = ImageDraw.Draw(image)
             label_size = draw.textsize(label, font)
 
             top, left, bottom, right = box
@@ -205,8 +204,7 @@ class YOLO(object):
             score = out_scores[i]
 
             label = '{} {:.2f}'.format(predicted_class, score)
-            image = image.convert('RGB') #对图像进行转换维度
-            draw = ImageDraw.Draw(image)
+            image = image.convert('RGB') #对图像进行转换维�?            draw = ImageDraw.Draw(image)
             #label_size = draw.textsize(label, font)
 
             top, left, bottom, right = box
