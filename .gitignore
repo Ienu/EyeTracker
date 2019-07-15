@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+#lib/
 lib64/
 parts/
 sdist/
@@ -108,4 +108,4 @@ venv.bak/
 gaze_est/model
 
 # data
-*.mp4
+data/

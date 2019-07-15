@@ -68,12 +68,12 @@ def get_multi_roi(image, landmarks):
 		
 	right_eye = image[top_l_y : down_r_y, top_l_x : down_r_x]
 
-	cv2.imshow('face_mask', face_mask)
-	cv2.imshow('face', face)
-	cv2.imshow('left_eye', left_eye)
-	cv2.imshow('right_eye', right_eye)
+#	cv2.imshow('face_mask', face_mask)
+#	cv2.imshow('face', face)
+#	cv2.imshow('left_eye', left_eye)
+#	cv2.imshow('right_eye', right_eye)
 
-	cv2.waitKey(1)
+#	cv2.waitKey(1)
 
 #	cv2.imwrite('temp/face_mask.jpg', face_mask)
 #	cv2.imwrite('temp/face.jpg', face)

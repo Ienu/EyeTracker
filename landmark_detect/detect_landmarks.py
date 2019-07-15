@@ -22,8 +22,8 @@ class LandmarkDetect:
 
     def __init__(self):
         '''init function'''
-        model_path = 'E:/Collection/Study/EyeTracker/landmark_detect/SBR/snapshots/CPM-SBR/checkpoint/cpm_vgg16-epoch-049-050.pth'
-        config_path = 'E:/Collection/Study/EyeTracker/landmark_detect/SBR/configs/Detector.config'
+        model_path = 'landmark_detect/SBR/snapshots/CPM-SBR/checkpoint/cpm_vgg16-epoch-049-050.pth'
+        config_path = 'landmark_detect/SBR/configs/Detector.config'
         #assert torch.cuda.is_available(), 'CUDA is not available.'
         torch.backends.cudnn.enabled = False#True
         torch.backends.cudnn.benchmark = False#True
