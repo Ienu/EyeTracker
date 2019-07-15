@@ -109,3 +109,6 @@ gaze_est/model
 
 # data
 data/
+
+＃ vscode
+.vscode/
