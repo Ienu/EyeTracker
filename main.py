@@ -9,11 +9,12 @@ Version:  v1.0 [07/03/2019][Wenyu] obtain face and landmarks with YOLO and SBR
           v2.1 [07/04/2019][Wenyu] format the code
           v2.2 [07/11/2019][Wenyu] formal the code on github
 		  v2.3 [07/12/2019][Wenyu] add and test face detector and landmark detector
+		  v2.4 [07/15/2019][Wenyu] add gaze estimator
 '''
 
 from face_detect import detect_face
 from landmark_detect import detect_landmarks
-from gaze_est import gaze_estimate
+from gaze_est import gaze_estimation
 
 from utils.get_multi_roi import get_multi_roi
 
@@ -40,7 +41,7 @@ def main(input_type):
 	
 	face_detector = detect_face.FaceDetect()
 	landmark_detector = detect_landmarks.LandmarkDetect()
-	gaze_estimator = gaze_estimate.GazeEstimate()
+	gaze_estimator = gaze_estimation.GazeEstimate()
 
 	while True:
 		# get image
@@ -78,14 +79,6 @@ def main(input_type):
 		# predict gaze point
 		pred = gaze_estimator.predict(face, face_mask, left_eye, right_eye)
 		print(pred)
-		#track.predict(face, face_mask, left_eye, right_eye)
-		#test_eye_left = cv2.imread('data/test_left_eye.jpg')
-		#test_eye_right = cv2.imread('data/test_right_eye.jpg')
-		#test_face = cv2.imread('data/test_face.jpg')
-		#test_face_mask = cv2.imread('data/test_face_mask.jpg', 0)
-
-		#pred = gaze_estimator.predict(test_face, test_face_mask, test_eye_left, test_eye_right)
-		#print(pred)
 
 if __name__ == '__main__':
 	main('video')
