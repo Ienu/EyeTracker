@@ -5,6 +5,7 @@ Author:   Wenyu
 Date:     07/12/2019
 Version:  v1.0 [07/12/2019][Wenyu] detect landmarks in face image by SBR
           v1.1 [07/12/2019][Wenyu] use CPU only as torch needs CUDA > 3.0
+          v1.2 [07/18/2019][Wenyu] add GPU option
 '''
 
 import cv2
@@ -20,13 +21,21 @@ from .SBR.lib.datasets import GeneralDataset as Dataset
 
 class LandmarkDetect:
 
-    def __init__(self):
+    def __init__(self, use_gpu=True):
         '''init function'''
         model_path = 'landmark_detect/SBR/snapshots/CPM-SBR/checkpoint/cpm_vgg16-epoch-049-050.pth'
         config_path = 'landmark_detect/SBR/configs/Detector.config'
-        #assert torch.cuda.is_available(), 'CUDA is not available.'
-        torch.backends.cudnn.enabled = False#True
-        torch.backends.cudnn.benchmark = False#True
+
+        self.use_gpu = use_gpu
+
+        if self.use_gpu:
+            assert torch.cuda.is_available(), 'CUDA is not available.'
+            torch.backends.cudnn.enabled = True
+            torch.backends.cudnn.benchmark = True
+        else:
+            torch.backends.cudnn.enabled = False
+            torch.backends.cudnn.benchmark = False
+
         snapshot = torch.load(model_path)
 
         # General Data Argumentation
@@ -41,14 +50,21 @@ class LandmarkDetect:
         self.dataset.reset(self.param.num_pts)
 
         self.net = obtain_model(model_config, self.param.num_pts + 1)
-        #self.net = self.net.cuda()
+
+        if self.use_gpu:
+            self.net = self.net.cuda()
+
         weights = remove_module_dict(snapshot['detector'])
         self.net.load_state_dict(weights)
 
     def detect_landmarks(self, img, face):
         '''detect landmarks'''
         [sbr_image, _, _, _, _, _, cropped_size], meta = self.dataset.prepare_input(img, [face[1], face[2], face[3], face[4]])
-        inputs = sbr_image.unsqueeze(0)#.cuda()
+        if self.use_gpu:
+            inputs = sbr_image.unsqueeze(0).cuda()
+        else:
+            inputs = sbr_image.unsqueeze(0)
+        
         # network forward
         with torch.no_grad():
             batch_heatmaps, batch_locs, batch_scos = self.net(inputs)

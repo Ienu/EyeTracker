@@ -10,6 +10,7 @@ Version:  v1.0 [07/03/2019][Wenyu] obtain face and landmarks with YOLO and SBR
           v2.2 [07/11/2019][Wenyu] formal the code on github
 		  v2.3 [07/12/2019][Wenyu] add and test face detector and landmark detector
 		  v2.4 [07/15/2019][Wenyu] add gaze estimator and try except
+		  v2.5 [07/18/2019][Wenyu] add time measurement
 '''
 
 from face_detect import detect_face
@@ -20,6 +21,7 @@ from utils.get_multi_roi import get_multi_roi
 
 import cv2
 import numpy as np
+import time
 
 from PIL import Image
 
@@ -53,14 +55,19 @@ def main(input_type):
 
 		try:
 			# get face box
+			face_ts = time.time()
 			face_box = face_detector.detect_face(image)
+			face_te = time.time()
 
 			if face_box == None:
 				continue
 
 			# get landmarks
 			img = Image.fromarray(image)
+
+			landmark_ts = time.time()
 			landmarks = landmark_detector.detect_landmarks(img, face_box)
+			landmark_te = time.time()
 
 			# show face rect and landmarks
 			image_show = image.copy()
@@ -73,8 +80,14 @@ def main(input_type):
 			face, face_mask, left_eye, right_eye = get_multi_roi(image, landmarks)
 
 			# predict gaze point
+			gaze_ts = time.time()
 			pred = gaze_estimator.predict(face, face_mask, left_eye, right_eye)
-			print(pred)
+			gaze_te = time.time()
+
+			#print(pred)
+			print('face detect time: ', face_te - face_ts)
+			print('landmark detect time: ', landmark_te - landmark_ts)
+			print('gaze estimation time: ', gaze_te - gaze_ts)
 
 			image_show = cv2.flip(image_show, 1)
 			cv2.circle(image_show, (int(pred[0]), int(pred[1])), radius=10, color=(255, 255, 255), thickness=5)
